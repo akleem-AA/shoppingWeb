@@ -20,7 +20,7 @@ const Cart = () => {
                 console.log("nuture button")
                 setBtnAnimation(btnAnimation => !btnAnimation)
                 setProductTitle("Nature List")
-                setTitleAnimation(!titleAnimation)
+                setTitleAnimation(true)
                 break;
             case "Animal":
                 setProductTitle("Animal List")
@@ -53,7 +53,7 @@ const Cart = () => {
     }
     return (
         <>
-            <h1 className={titleAnimation ? 'text-center text-warning animate__animated animate__heartBeat' : "text-center text-success"}>{productTitle ? productTitle : "All List"}</h1>
+            <h1 className={titleAnimation ? 'text-center text-warning animate__animated animate__rotateInDownLeft' : "text-center text-success"}>{productTitle ? productTitle : "All List"}</h1>
             <div className='container-fluid mx-2'>
                 <div className='row mt-5 mx-2'>
                     <div className='col-md-3 border-left-3'>
@@ -66,18 +66,34 @@ const Cart = () => {
                     <div className='col-md-9 '>
                         <div className='row'>
                             {data.map((item) => {
-                                const { picture, name: title, online: active, } = item
+                                const { picture, name: title, online: active, description: desc } = item
                                 return (<>
-                                    <div className='col-md-4 mb-4'>
-                                        <div className={isActive ? " animate__animated animate__fadeInTopLeft card" : "card"} onClick={cart}>
-                                            <img src={picture} className="card-img-top" alt="..." />
-                                            <div className="card-body">
-                                                <h5 className="card-title">{title}</h5>
-                                                <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                                <a href="#" className="btn btn-primary">Go somewhere</a>
+                                    {!isActive ? <>
+                                        <div className='col-md-4 mb-4'>
+                                            <div className='card'>
+                                                <img src={picture} className="card-img-top" alt="..." />
+                                                <div className="card-body animate__animated animate__flipInY" onClick={() => cart()}>
+                                                    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                                                        <h5 className="card-title">{title}</h5>
+                                                        <h5 className={active ? "card-title text-success" : "card-title text-danger"}>{active ? "Avtive" : "Offline"}</h5>
+                                                    </div>
+                                                    <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                                    <a href="#" className="btn btn-primary">Go somewhere</a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+
+                                    </> : <>
+                                        <div className='col-md-4 mb-4'>
+                                            <div className="card" onClick={() => cart()}>
+                                                {/* <img src={picture} className="card-img-top" alt="..." /> */}
+                                                <div className="card-body animate__animated animate__flipInY">
+                                                    <p className="card-text">{desc}</p>
+                                                    <a href="#" className="btn btn-primary">Go somewhere</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>}
                                 </>)
                             })
 
