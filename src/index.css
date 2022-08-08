@@ -15,3 +15,9 @@ code {
 body {
   overflow-x: hidden;
 }
+
+.card-img-top {
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}

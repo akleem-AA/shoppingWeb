@@ -10,13 +10,22 @@ const Cart = () => {
     const [data, setData] = useState(Api)
 
     const cart = (data) => {
-        console.log("click on cart")
+        console.log("click on cart", data)
         setActive(isActive => !isActive);
     }
     const buttons = (data) => {
         console.log(data)
         switch (data) {
+            case "All":
+                setData(Api)
+                break;
+
             case "Nature":
+                let result = Api.filter((item) => {
+                    console.log("item", item)
+                    return item.category === "nature"
+                })
+                setData(result)
                 console.log("nuture button")
                 setBtnAnimation(btnAnimation => !btnAnimation)
                 setProductTitle("Nature List")
@@ -39,24 +48,14 @@ const Cart = () => {
                 setTitleAnimation(!titleAnimation)
         }
     }
-    const animal = () => {
-        setActive(isActive => !isActive);
-    }
-    const water = () => {
-        setActive(isActive => !isActive);
-    }
-    const cars = () => {
-        setActive(isActive => !isActive);
-    }
-    const bike = () => {
-        setActive(isActive => !isActive);
-    }
+
     return (
         <>
             <h1 className={titleAnimation ? 'text-center text-warning animate__animated animate__rotateInDownLeft' : "text-center text-success"}>{productTitle ? productTitle : "All List"}</h1>
             <div className='container-fluid mx-2'>
                 <div className='row mt-5 mx-2'>
                     <div className='col-md-3 border-left-3'>
+                        <button className={btnAnimation ? 'btn btn-warning w-100 mb-4 animate__animated animate__heartBeat' : 'btn btn-warning w-100 mb-4'} onClick={() => buttons("All")}>ALL</button>
                         <button className={btnAnimation ? 'btn btn-warning w-100 mb-4 animate__animated animate__heartBeat' : 'btn btn-warning w-100 mb-4'} onClick={() => buttons("Nature")}>Nature</button>
                         <button className='btn btn-warning w-100 mb-4 animate__animated animate__zoomIn' onClick={() => buttons("Animal")}>Animal</button>
                         <button className='btn btn-warning w-100 mb-4 animate__zoomIn' onClick={() => buttons("Water")}>Water</button>
@@ -65,14 +64,14 @@ const Cart = () => {
                     </div>
                     <div className='col-md-9 '>
                         <div className='row'>
-                            {data.map((item) => {
+                            {data.map((item, index) => {
                                 const { picture, name: title, online: active, description: desc } = item
                                 return (<>
                                     {!isActive ? <>
-                                        <div className='col-md-4 mb-4'>
+                                        <div className='col-md-4 mb-4' key={index}>
                                             <div className='card'>
                                                 <img src={picture} className="card-img-top" alt="..." />
-                                                <div className="card-body animate__animated animate__flipInY" onClick={() => cart()}>
+                                                <div className="card-body " onClick={() => cart(item)}>
                                                     <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                                                         <h5 className="card-title">{title}</h5>
                                                         <h5 className={active ? "card-title text-success" : "card-title text-danger"}>{active ? "Avtive" : "Offline"}</h5>
@@ -84,8 +83,8 @@ const Cart = () => {
                                         </div>
 
                                     </> : <>
-                                        <div className='col-md-4 mb-4'>
-                                            <div className="card" onClick={() => cart()}>
+                                        <div className='col-md-4 mb-4' key={index}>
+                                            <div className="card" onClick={() => cart(item)}>
                                                 {/* <img src={picture} className="card-img-top" alt="..." /> */}
                                                 <div className="card-body animate__animated animate__flipInY">
                                                     <p className="card-text">{desc}</p>
